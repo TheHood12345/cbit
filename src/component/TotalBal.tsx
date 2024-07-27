@@ -15,7 +15,7 @@ export const TotalBal = () => {
         </div>
         <div className="w-1/2  px-4">
           <button className="px-5 py-3 rounded-sm text-white bg-orange-500 font-semibold hover:bg-blue-600 duration-300 ease-in transition cursor-pointer">
-            Deposite
+            Deposit
           </button>
         </div>
       </div>

@@ -6,11 +6,13 @@ export const Signup = () => {
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
+    userName: "",
     email: "",
-    username: "",
     phoneNumber: "",
-    country: "",
     password: "",
+    agreedToTerms: true,
+    country: ""
+    
   });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -29,7 +31,8 @@ export const Signup = () => {
 
     try {
       const response = await axios.post(
-        "https://your-api-endpoint.com/signup",
+        "https://backend.chambit.exchange/api/auth/signup",
+        //"https://your-api-endpoint.com/signup",
         formData
       );
       console.log("Signup successful:", response.data);
@@ -43,7 +46,7 @@ export const Signup = () => {
   };
 
   return (
-    <div className="flex bg-gray-950 text-white justify-center items-center py-20 px-4 h-screen">
+    <div style={{height:"100%"}} className="flex bg-gray-950 text-white justify-center items-center py-20 px-4 h-screen">
       <div className="w-full max-w-sm">
         <div className="flex justify-center mb-6">
           <img src={logo} alt="Logo" className="h-[50px]" />
@@ -88,9 +91,9 @@ export const Signup = () => {
           <div className="mb-4">
             <input
               type="text"
-              name="username"
+              name="userName"
               placeholder="Username"
-              value={formData.username}
+              value={formData.userName}
               onChange={handleChange}
               className="w-full py-2 rounded-md border bg-transparent p-2 outline-none hover:border-green-400"
             />
