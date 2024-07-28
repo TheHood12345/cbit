@@ -1,9 +1,11 @@
 import { useState } from "react";
 import axios from "axios";
 import logo from "../asset/chambit.svg";
-import {Link} from "react-router-dom";
+import {useNavigate} from "react-router-dom";
 
 export const Signup = () => {
+
+  let navigate = useNavigate();
 
   const [formData, setFormData] = useState({
     firstName: "",
@@ -35,10 +37,12 @@ export const Signup = () => {
     try {
       const response = await axios.post(
         "https://backend.chambit.exchange/api/auth/signup",
-        //"https://your-api-endpoint.com/signup",
         formData
       );
-      console.log("Signup successful:", response.data);
+      console.log("Signup successful:", response.data.data.userId);
+      localStorage.removeItem("userId");
+      localStorage.setItem("userId", response.data.data.userId);
+      await navigate("/otp", {state: {formData}});
       // Handle successful signup (e.g., redirect to login page)
     } catch (err) {
       console.error("Signup failed:", err);
@@ -48,17 +52,13 @@ export const Signup = () => {
     }
   };
 
+
   
   let [country, setCountry] = useState([]);
-  // let [countryLoaded, setCountryLoaded] = useState();
 
   const fetchCountries = async()=>{
-
     let res = await axios.get("https://backend.chambit.exchange/api/auth/country-list");
-    setCountry(Object.values(res.data));
-    // .then((res)=> res.json())
-    // .then((res)=>{});
-    
+    setCountry(Object.values(res.data)); 
   };
 
   return (
@@ -125,19 +125,9 @@ export const Signup = () => {
             />
           </div>
           <div className="mb-4">
-            {/* <p className="py-2">Country</p> */}
-            {/* <input
-              type="text"
-              name="country"
-              value={formData.country}
-              onChange={handleChange}
-              className="w-full py-2 rounded-md border bg-transparent p-2 outline-none hover:border-green-500"
-            /> */}
             <select
               name="country"
               onFocus={fetchCountries}
-              // value={formData.country}
-              // onChange={handleChange}
               className="w-full py-2 rounded-md border bg-transparent p-2 outline-none hover:border-green-500"
             >
               <option disabled selected>Country</option>
@@ -173,14 +163,14 @@ export const Signup = () => {
           {error && (
             <p className="text-red-500 text-sm text-center mb-4">{error}</p>
           )}
-          {/* <button
+          <button
             type="submit"
             disabled={loading}
             className="w-full bg-blue-600 rounded-lg py-2 mb-2 text-xl text-white font-bold cursor-pointer hover:bg-orange-500"
           >
-            {loading ? "Creating Account..." : "Create Account"}
-          </button> */}
-          <Link to="/otp" style={{backgroundColor: "rgb(16, 26, 60)",paddingLeft: "20px",paddingRight:"20px",paddingTop:"10px",paddingBottom:"10px",borderRadius:"10px"}}>Submit</Link>
+            {loading ? "Submitting details..." : "Submit"}
+          </button>
+          
           <p className="py-2 text-center">
             Already have an account?{" "}
             <a href="/login" className="text-orange-500">
