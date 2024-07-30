@@ -13,6 +13,9 @@ import { PtoP } from "./component/PtoP.tsx";
 import { OrderBook } from "./component/OrderBook.tsx";
 
 import { Otp } from "./Signup/otp.tsx";
+import { ForgotPassword } from "./Login/forgot_password_1.tsx";
+import { ForgotPasswordSuccess } from "./Login/forgot_password__2.tsx";
+import { NewPassword } from "./Login/new_password.tsx";
 
 const router = createBrowserRouter([
   {
@@ -31,6 +34,18 @@ const router = createBrowserRouter([
       {
         path: "/otp",
         element: <Otp/>
+      },
+      {
+        path: "/forgot-password",
+        element: <ForgotPassword />
+      },
+      {
+        path: "/forgot-password-success",
+        element: <ForgotPasswordSuccess />
+      },
+      {
+        path: "/new-password",
+        element: <NewPassword />
       },
       {
         path: "/",

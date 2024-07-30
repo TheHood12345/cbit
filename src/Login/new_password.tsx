@@ -4,12 +4,13 @@ import axios from "axios";
 import logo from "../asset/chambit.svg";
 import { useNavigate } from "react-router-dom";
 
-export const Login = () => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [showPassword, setShowPassword] = useState(false);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null); // Explicitly type the state
+export const NewPassword = () => {
+    // const [email, setEmail] = useState("");
+    const [newPassword, setNewPassword] = useState("");
+    const [token, setToken] = useState("");
+    const [showPassword, setShowPassword] = useState(false);
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState<string | null>(null); // Explicitly type the state
 
   const navigate = useNavigate();
 
@@ -19,53 +20,54 @@ export const Login = () => {
     setError(null);
 
     try {
-      const response = await axios.post("https://backend.chambit.exchange/api/auth/signin", {
-        email,
-        password,
+      const response = await axios.post("https://backend.chambit.exchange/api/users/reset-passord", {
+        token,
+        newPassword
       });
       console.log("Login successful:", response.data);
-      localStorage.removeItem("userId");
-      localStorage.setItem("userId", response.data.existingUser._id);
-      if(response.data.message == "Welcome back"){
-        navigate("/")
+    //   localStorage.removeItem("userId");
+    //   localStorage.setItem("userId", response.data.existingUser._id);
+      if(response.data.message == "Password reset email sent successfully."){
+        navigate("/login")
       }
       // Handle successful login (e.g., store tokens, redirect)
     } catch (err) {
-      console.error("Login failed:", err);
-      setError("Login failed. Please check your credentials and try again.");
+      console.error("Reset password failed:", err);
+      setError("Reset password Login failed. Please check your credentials and try again.");
     } finally {
       setLoading(false);
     }
   };
 
-  return (
-    <div className="flex bg-gray-950 text-white justify-center items-center py-20 px-4 h-screen" style={{overflowY:"auto"}}>
+
+
+
+    return (
+        <div className="flex bg-gray-950 text-white justify-center items-center py-20 px-4 h-screen" style={{overflowY:"auto"}}>
       <div className="w-full max-w-sm">
         <div className="flex justify-center mb-6">
           <img src={logo} alt="Logo" className="h-[50px] mt-10" />
         </div>
-        <h1 className="text-2xl mt-5 font-bold text-center">
-          Login to your Account
+        <h1 className="text-2xl mt-5 font-bold text-center" style={{marginBottom:"10px"}}>
+          Password Reset
         </h1>
-        <p className="py-4 text-sm text-center">
-          Login to your account by entering your email and password
-        </p>
         <form onSubmit={handleLogin}>
           <div className="mb-4">
             <input
               type="text"
-              placeholder="Email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              placeholder="Token"
+              style={{display:"none"}}
+              value={token}
+              onChange={(e) => setToken(e.target.value)}
               className="w-full py-2 rounded-md border bg-transparent p-2 outline-none hover:border-green-400"
             />
           </div>
           <div className="mb-4 relative" style={{marginBottom:"0px"}}>
             <input
               type={showPassword ? "text" : "password"}
-              placeholder="Password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
+              placeholder="New password"
+              value={newPassword}
+              onChange={(e) => setNewPassword(e.target.value)}
               className="w-full py-2 rounded-md border bg-transparent p-2 outline-none hover:border-green-400"
             />
             <div
@@ -79,11 +81,6 @@ export const Login = () => {
               )}
             </div>
           </div>
-          <p className="py-2 text-center" style={{float: "right",marginTop:"0px"}}>
-            <a href="/forgot-password" className="text-orange-500">
-              Forgot password?
-            </a>
-          </p>
           {/* {error && (
             <p className="text-red-500 text-sm text-center mb-4">{error}</p>
           )} */}
@@ -91,21 +88,15 @@ export const Login = () => {
             type="submit"
             disabled={loading}
             className="w-full bg-blue-600 rounded-lg py-2 mt-10 mb-2 text-md text-white font-bold"
-            style={{marginTop:"0px"}}
+            
           >
-            {loading ? "Logging in..." : "Login"}
+            {loading ? "Resetting password..." : "Reset Password"}
           </button>
-          <p className="py-2 text-center">
-            Don't have an account?{" "}
-            <a href="/signup" className="text-orange-500">
-              Sign up here
-            </a>
-          </p>
           {error && (
             <p className="text-red-500 text-sm text-center mb-4">{error}</p>
           )}
         </form>
       </div>
     </div>
-  );
-};
+    )
+}
